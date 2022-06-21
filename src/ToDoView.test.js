@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import ToDoView from './ToDoView';
 
-test('renders learn react link', () => {
-    render(<ToDoView />);
-    const linkElement = screen.getByText(/learn react/i);
-    expect(linkElement).toBeInTheDocument();
+describe('To Do View', () => {
+    it('should have a button', () => {
+        expect(screen.getByLabelText('button')).toBeInTheDocument()
+    })
 });
