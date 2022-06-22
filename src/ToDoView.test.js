@@ -2,50 +2,56 @@ import { render, screen } from '@testing-library/react';
 import ToDoView from './ToDoView';
 import userEvent from "@testing-library/user-event";
 
+const addButton = () => screen.getByRole('button');
+const dialogBox = () => screen.getByLabelText('Add New To Do');
+const saveButton = () => screen.getByText('Add To Do');
+const cancelButton = () => screen.getByText('Cancel');
+const inputBox = () => screen.getByLabelText('Enter To Do task here');
+
 describe('To Do View', () => {
     it('should have a button', () => {
         render(<ToDoView />)
 
-        expect(screen.getByRole('button')).toBeInTheDocument()
+        expect(addButton()).toBeInTheDocument()
     })
 
     it('should display a pop up', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
+        userEvent.click(addButton());
 
-        expect(screen.getByLabelText('Add New To Do')).toBeInTheDocument()
+        expect(dialogBox()).toBeInTheDocument()
     })
 
     it('should have add button on dialog box', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
+        userEvent.click(addButton());
 
-        expect(screen.getByText('Add To Do')).toBeInTheDocument();
+        expect(saveButton()).toBeInTheDocument();
     })
 
     it('should have cancel button on dialog box', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
+        userEvent.click(addButton());
 
-        expect(screen.getByText('Cancel')).toBeInTheDocument();
+        expect(cancelButton()).toBeInTheDocument();
     })
 
     it('should have input box on dialog', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
+        userEvent.click(addButton());
 
-        expect(screen.getByLabelText('Enter To Do task here')).toBeInTheDocument();
+        expect(inputBox()).toBeInTheDocument();
     })
 
     it('should close dialog on cancel', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
-        userEvent.click(screen.getByText('Cancel'));
+        userEvent.click(addButton());
+        userEvent.click(cancelButton());
 
         expect(screen.queryByText('Enter To Do Task here')).not.toBeInTheDocument();
     })
@@ -53,9 +59,9 @@ describe('To Do View', () => {
     it('should add to do to list when add to do button pressed', () => {
         render(<ToDoView />)
 
-        userEvent.click(screen.getByRole('button'));
-        userEvent.type(screen.queryByText('Enter To Do Task here'), 'Item 1')
-        userEvent.click(screen.getByText('Add To Do'));
+        userEvent.click(addButton());
+        userEvent.type(inputBox(), 'Item 1')
+        userEvent.click(saveButton());
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();
     })
