@@ -1,5 +1,5 @@
 
-import {Button, Dialog, DialogContent, DialogTitle, TextField} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, TextField} from "@mui/material";
 import {useState} from "react";
 
 export default function ToDoView() {
@@ -13,7 +13,11 @@ export default function ToDoView() {
         setOpen(false);
     };
 
-    return ( <div>
+    return (
+        <div>
+            <List>
+                <ListItem>{'Item 1'}</ListItem>
+            </List>
         <Button onClick={handleClickOpen}>
              +Add To Do
         </Button>

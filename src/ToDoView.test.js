@@ -56,14 +56,10 @@ describe('To Do View', () => {
         expect(screen.queryByText('Enter To Do Task here')).not.toBeInTheDocument();
     })
 
-    it('should add to do to list when add to do button pressed', () => {
+    it('should contain a list', () => {
         render(<ToDoView />)
 
-        userEvent.click(addButton());
-        userEvent.type(inputBox(), 'Item 1')
-        userEvent.click(saveButton());
-
-        expect(screen.getByText('Item 1')).toBeInTheDocument();
+        expect(screen.getByRole('list')).toBeInTheDocument();
     })
 
 });
