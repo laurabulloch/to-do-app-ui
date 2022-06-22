@@ -47,8 +47,17 @@ describe('To Do View', () => {
         userEvent.click(screen.getByRole('button'));
         userEvent.click(screen.getByText('Cancel'));
 
-
         expect(screen.queryByText('Enter To Do Task here')).not.toBeInTheDocument();
+    })
+
+    it('should add to do to list when add to do button pressed', () => {
+        render(<ToDoView />)
+
+        userEvent.click(screen.getByRole('button'));
+        userEvent.type(screen.queryByText('Enter To Do Task here'), 'Item 1')
+        userEvent.click(screen.getByText('Add To Do'));
+
+        expect(screen.getByText('Item 1')).toBeInTheDocument();
     })
 
 });
