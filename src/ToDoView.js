@@ -1,11 +1,21 @@
 
-import {Button} from "@mui/material";
+import {Button, Dialog, DialogTitle} from "@mui/material";
+import {useState} from "react";
 
 export default function ToDoView() {
+    const [open, setOpen] = useState(false);
 
-    return (
-        <Button>
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    return ( <div>
+        <Button onClick={handleClickOpen}>
             Add to do
         </Button>
+        <Dialog open={open} >
+            <DialogTitle>Add New To Do</DialogTitle>
+        </Dialog>
+    </div>
     )
 }
