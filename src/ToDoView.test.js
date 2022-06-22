@@ -17,12 +17,28 @@ describe('To Do View', () => {
         expect(screen.getByLabelText('Add New To Do')).toBeInTheDocument()
     })
 
-    it('should have add button on pop up', () => {
+    it('should have add button on bialog box', () => {
         render(<ToDoView />)
 
         userEvent.click(screen.getByRole('button'));
 
-        expect(screen.getByText('Add to tasks')).toBeInTheDocument();
+        expect(screen.getByText('Add To Do')).toBeInTheDocument();
+    })
+
+    it('should have cancel button on dialog box', () => {
+        render(<ToDoView />)
+
+        userEvent.click(screen.getByRole('button'));
+
+        expect(screen.getByText('Cancel')).toBeInTheDocument();
+    })
+
+    it('should have input box on dialog box', () => {
+        render(<ToDoView />)
+
+        userEvent.click(screen.getByRole('button'));
+
+        expect(screen.getByRole('input')).toBeInTheDocument();
     })
 
 });

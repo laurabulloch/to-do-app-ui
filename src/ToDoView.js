@@ -11,11 +11,12 @@ export default function ToDoView() {
 
     return ( <div>
         <Button onClick={handleClickOpen}>
-            Add to do
+             +Add To Do
         </Button>
         <Dialog open={open} >
             <DialogTitle>Add New To Do</DialogTitle>
-            <Button>Add to tasks</Button>
+            <Button>Cancel</Button>
+            <Button>Add To Do</Button>
         </Dialog>
     </div>
     )
