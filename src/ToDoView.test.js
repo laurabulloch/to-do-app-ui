@@ -17,4 +17,12 @@ describe('To Do View', () => {
         expect(screen.getByLabelText('Add New To Do')).toBeInTheDocument()
     })
 
+    it('should have add button on pop up', () => {
+        render(<ToDoView />)
+
+        userEvent.click(screen.getByRole('button'));
+
+        expect(screen.getByText('Add to tasks')).toBeInTheDocument();
+    })
+
 });

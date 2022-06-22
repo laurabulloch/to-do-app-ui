@@ -15,6 +15,7 @@ export default function ToDoView() {
         </Button>
         <Dialog open={open} >
             <DialogTitle>Add New To Do</DialogTitle>
+            <Button>Add to tasks</Button>
         </Dialog>
     </div>
     )
