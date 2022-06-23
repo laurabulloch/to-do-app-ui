@@ -7,7 +7,6 @@ export default function ToDoView() {
     const [name, setName] = useState('');
     const [toDos, setToDos] = useState([]);
 
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -28,16 +27,15 @@ export default function ToDoView() {
                 {toDos.map((item) =>
                     (<ListItem> {(item.name)} </ListItem>)) }
             </List>
-
             <Button onClick={handleClickOpen}>
-                +Add To Do
+                + Add To Do
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add New To Do</DialogTitle>
                 <DialogContent>
                     <TextField
                         id="to-do-name"
-                        label="Enter To Do task here"
+                        label="Enter To Do here"
                         value = {name}
                         onChange = {(event) => setName(event.target.value)}
                     />
