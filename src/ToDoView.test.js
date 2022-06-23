@@ -62,4 +62,15 @@ describe('To Do View', () => {
         expect(screen.getByRole('list')).toBeInTheDocument();
     })
 
+    it('should add to list on user input', () => {
+        render(<ToDoView />)
+
+        userEvent.click(addButton());
+        userEvent.type(inputBox(), 'Item');
+        userEvent.click(saveButton());
+
+        expect(screen.getByText('Item')).toBeInTheDocument();
+    })
+
+
 });

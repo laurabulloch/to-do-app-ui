@@ -4,6 +4,9 @@ import {useState} from "react";
 
 export default function ToDoView() {
     const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [toDos, setToDos] = useState([]);
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -13,27 +16,35 @@ export default function ToDoView() {
         setOpen(false);
     };
 
+    const handleAddItem = () => {
+        const current = toDos.concat({name});
+        setToDos(current);
+        handleClose()
+    };
+
     return (
         <div>
             <List>
-                <ListItem>{'Item 1'}</ListItem>
+                {toDos.map((item) =>
+                    (<ListItem> {(item.name)} </ListItem>)) }
             </List>
-        <Button onClick={handleClickOpen}>
-             +Add To Do
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Add New To Do</DialogTitle>
-            <DialogContent>
-                <TextField
-                    id="to-do-name"
-                    label="Enter To Do task here"
-                    fullWidth
-                    variant="standard"
-                />
-            </DialogContent>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button>Add To Do</Button>
-        </Dialog>
-    </div>
+
+            <Button onClick={handleClickOpen}>
+                +Add To Do
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Add New To Do</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        id="to-do-name"
+                        label="Enter To Do task here"
+                        value = {name}
+                        onChange = {(event) => setName(event.target.value)}
+                    />
+                </DialogContent>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleAddItem}>Add To Do</Button>
+            </Dialog>
+        </div>
     )
 }
