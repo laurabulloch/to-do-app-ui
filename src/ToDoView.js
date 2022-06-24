@@ -34,7 +34,6 @@ export default function ToDoView() {
                 <DialogTitle>Add New To Do</DialogTitle>
                 <DialogContent>
                     <TextField
-                        id="to-do-name"
                         label="Enter To Do here"
                         value = {name}
                         onChange = {(event) => setName(event.target.value)}

@@ -1,9 +1,8 @@
 import ToDoView from './ToDoView';
 import userEvent from "@testing-library/user-event";
-import { render, screen } from '@testing-library/react';
+import {render, screen, waitForElementToBeRemoved} from '@testing-library/react';
 
 const addButton = () => screen.getByRole('button', '+ Add To Do');
-const dialogBox = () => screen.getByRole('dialog');
 const saveButton = () => screen.getByText('Add To Do');
 const cancelButton = () => screen.getByText('Cancel');
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
@@ -19,7 +18,7 @@ describe('To Do View', () => {
     it('should display a pop up', () => {
         userEvent.click(addButton());
 
-        expect(dialogBox()).toBeInTheDocument()
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
     it('should have add button on dialog box', () => {
         userEvent.click(addButton());
@@ -36,11 +35,14 @@ describe('To Do View', () => {
 
         expect(toDoTextField()).toBeInTheDocument();
     })
-    it('should close dialog on cancel', () => {
+    it('should close dialog on cancel', (done) => {
         userEvent.click(addButton());
         userEvent.click(cancelButton());
 
-        expect(screen.queryByLabelText('Add New To Do')).not.toBeInTheDocument();
+        waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+            expect(screen.queryByLabelText('Add New To Do')).not.toBeInTheDocument();
+            done();
+        });
     })
     it('should contain a list', () => {
         expect(screen.getByRole('list')).toBeInTheDocument();
