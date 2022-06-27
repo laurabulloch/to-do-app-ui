@@ -1,12 +1,18 @@
 
 import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, TextField} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function ToDoView() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const [toDos, setToDos] = useState([]);
 
+    useEffect(() => {
+        axios.get('/to-dos').then((response) => {
+            setToDos(response.data);
+        });
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
