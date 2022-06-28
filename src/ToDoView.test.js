@@ -9,7 +9,6 @@ const toDoTextField = () => screen.getByLabelText('Enter To Do here');
 
 describe('To Do View', () => {
     beforeEach( () => {
-        // eslint-disable-next-line testing-library/no-render-in-setup
         render(<ToDoView />)
     });
     it('should have a button', () => {
