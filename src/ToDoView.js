@@ -19,7 +19,7 @@ export default function ToDoView() {
 
     const handleInputError = () => {
         setName('');
-        setErrorMessage("");
+        setErrorMessage("Invalid Input");
     }
 
     const handleAddItem = () => {
