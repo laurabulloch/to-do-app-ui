@@ -6,20 +6,33 @@ export default function ToDoView() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const [toDos, setToDos] = useState([]);
-
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
+        setErrorMessage('');
         setOpen(false);
     };
 
+    const handleInputError = () => {
+        setName('');
+        setErrorMessage("");
+    }
+
     const handleAddItem = () => {
-        const current = toDos.concat({name});
-        setToDos(current);
-        handleClose()
+        if ({name}.name.length === 0 || {name}.name.length > 100){
+            handleInputError();
+        }
+        else
+        {
+            const current = toDos.concat({name});
+            setToDos(current);
+            setName("");
+            handleClose();
+        }
     };
 
     return (
@@ -36,6 +49,7 @@ export default function ToDoView() {
                 <DialogContent>
                     <TextField
                         label="Enter To Do here"
+                        helperText = {errorMessage}
                         value = {name}
                         onChange = {(event) => setName(event.target.value)}
                     />
