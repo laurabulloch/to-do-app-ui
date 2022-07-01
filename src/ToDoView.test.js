@@ -57,22 +57,7 @@ describe('To Do View', () => {
         expect(screen.getByText('Item')).toBeInTheDocument();
     })
     it('should fetch data', () =>{
-        const toDos = [
-            {name: 'Item 1'},
-            {name: 'Item 2'},
-        ];
-        axios.get.mockImplementationOnce(() => Promise.resolve(toDos))
-
         expect(axios.get).toHaveBeenCalledWith('/to-dos');
-    })
-    it('should handle error with fetching data',  () =>{
-        const errorMessage = 'Network Error';
-
-        axios.get.mockImplementationOnce(() =>
-            Promise.reject(new Error(errorMessage)),
-        );
-
-        expect(ToDoView()).rejects.toThrow(errorMessage);
     })
     it('should load data into list and display',  () =>{
         const toDos = [
@@ -84,4 +69,8 @@ describe('To Do View', () => {
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('Item 2')).toBeInTheDocument();
     })
+    it('should post the data', () =>{
+        expect(axios.post).toHaveBeenCalledWith('/to-dos');
+    })
+
 });

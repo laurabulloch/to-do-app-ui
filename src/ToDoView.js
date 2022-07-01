@@ -9,10 +9,10 @@ export default function ToDoView() {
     const [toDos, setToDos] = useState([]);
 
     useEffect(() => {
-        axios.get('/to-dos').then((response) => {
+        axios.get(`/to-dos`).then(response => {
             setToDos(response.data);
-        });
-    });
+        })
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -23,10 +23,16 @@ export default function ToDoView() {
     };
 
     const handleAddItem = () => {
-        const current = toDos.concat({name});
-        setToDos(current);
+        axios
+            .post(`/to-dos`, {
+                name: {name},
+            })
+            .then((response) => {
+                setToDos(response.data);
+            });
         handleClose()
     };
+
 
     return (
         <div>
