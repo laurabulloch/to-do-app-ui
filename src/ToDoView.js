@@ -12,7 +12,7 @@ export default function ToDoView() {
         axios.get(`/to-dos`).then(response => {
             setToDos(response.data);
         })
-    }, []);
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,10 +25,11 @@ export default function ToDoView() {
     const handleAddItem = () => {
         axios
             .post(`/to-dos`, {
-                name: {name},
+                name,
             })
             .then((response) => {
-                setToDos(response.data);
+                const updatedToDos = [...toDos, response.data]
+                setToDos(updatedToDos);
             });
         handleClose()
     };

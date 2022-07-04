@@ -2,6 +2,7 @@ import ToDoView from './ToDoView';
 import userEvent from "@testing-library/user-event";
 import {render, screen, waitForElementToBeRemoved} from '@testing-library/react';
 import axios from "axios";
+import {act} from "react-dom/test-utils";
 
 const addButton = () => screen.getByRole('button', '+ Add To Do');
 const saveButton = () => screen.getByText('Add To Do');
@@ -11,8 +12,11 @@ const toDoTextField = () => screen.getByLabelText('Enter To Do here');
 jest.mock('axios');
 
 describe('To Do View', () => {
-    beforeEach( () => {
-        render(<ToDoView />)
+    beforeEach( async () => {
+        axios.get.mockResolvedValue({data: []})
+        await act(async () => {
+            render(<ToDoView/>)
+        });
     });
     it('should have a button', () => {
         expect(addButton()).toBeInTheDocument()
@@ -22,7 +26,7 @@ describe('To Do View', () => {
 
         expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
-    it('should have add button on dialog box', () => {
+    it('should have save button on dialog box', () => {
         userEvent.click(addButton());
 
         expect(saveButton()).toBeInTheDocument();
@@ -39,6 +43,7 @@ describe('To Do View', () => {
     })
     it('should close dialog on cancel', (done) => {
         userEvent.click(addButton());
+
         userEvent.click(cancelButton());
 
         waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
@@ -49,7 +54,23 @@ describe('To Do View', () => {
     it('should contain a list', () => {
         expect(screen.getByRole('list')).toBeInTheDocument();
     })
+    it('should post on save',  () => {
+        axios.post.mockImplementation(() => new Promise(jest.fn()));
+
+        userEvent.click(addButton());
+        userEvent.type(toDoTextField(), 'Item');
+        userEvent.click(saveButton());
+
+        expect(axios.post).toHaveBeenCalledWith('/to-dos', {name: 'Item'});
+    })
     it('should add to list on user input', () => {
+        axios.post.mockResolvedValue({
+            data: {
+                id: 1,
+                name: 'Item'
+            }
+        });
+
         userEvent.click(addButton());
         userEvent.type(toDoTextField(), 'Item');
         userEvent.click(saveButton());
