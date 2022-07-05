@@ -3,4 +3,3 @@ node_js:
   - "16"
 script:
   - npm test
-  - npm lint
