@@ -6,7 +6,7 @@ export default function ToDoView() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [toDos, setToDos] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios.get(`/to-dos`).then((response) => {
@@ -19,32 +19,30 @@ export default function ToDoView() {
   };
 
   const handleClose = () => {
-      setErrorMessage('');
-      setOpen(false);
+    setErrorMessage('');
+    setOpen(false);
   };
 
-    const handleInputError = () => {
-        setName('');
-        setErrorMessage("Invalid Input");
-    }
+  const handleInputError = () => {
+    setName('');
+    setErrorMessage('Invalid Input');
+  };
 
-    const handleAddItem = () => {
-        if ({name}.name.length === 0 || {name}.name.length > 100){
-            handleInputError();
-        }
-        else
-        {
-            axios
-              .post(`/to-dos`, {
-                  name,
-              })
-              .then((response) => {
-                  const updatedToDos = [...toDos, response.data];
-                  setToDos(updatedToDos);
-              });
-            handleClose();
-        }
-    };
+  const handleAddItem = () => {
+    if ({ name }.name.length === 0 || { name }.name.length > 100) {
+      handleInputError();
+    } else {
+      axios
+        .post(`/to-dos`, {
+          name,
+        })
+        .then((response) => {
+          const updatedToDos = [...toDos, response.data];
+          setToDos(updatedToDos);
+        });
+      handleClose();
+    }
+  };
 
   return (
     <div>
@@ -53,23 +51,22 @@ export default function ToDoView() {
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
           </ListItem>
-        ))}    </List>
-            <Button onClick={handleClickOpen}>
-                + Add To Do
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add New To Do</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="Enter To Do here"
-                        helperText = {errorMessage}
-                        value = {name}
-                        onChange = {(event) => setName(event.target.value)}
-                    />
-                </DialogContent>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleAddItem}>Add To Do</Button>
-            </Dialog>
-        </div>
-    );
+        ))}{' '}
+      </List>
+      <Button onClick={handleClickOpen}>+ Add To Do</Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New To Do</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Enter To Do here"
+            helperText={errorMessage}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </DialogContent>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleAddItem}>Add To Do</Button>
+      </Dialog>
+    </div>
+  );
 }
