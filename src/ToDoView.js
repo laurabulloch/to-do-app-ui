@@ -1,21 +1,27 @@
-
-import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, TextField} from "@mui/material";
-import {useState} from "react";
+import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function ToDoView() {
-    const [open, setOpen] = useState(false);
-    const [name, setName] = useState('');
-    const [toDos, setToDos] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [toDos, setToDos] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+  useEffect(() => {
+    axios.get(`/to-dos`).then((response) => {
+      setToDos(response.data);
+    });
+  }, []);
 
-    const handleClose = () => {
-        setErrorMessage('');
-        setOpen(false);
-    };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+      setErrorMessage('');
+      setOpen(false);
+  };
 
     const handleInputError = () => {
         setName('');
@@ -28,19 +34,26 @@ export default function ToDoView() {
         }
         else
         {
-            const current = toDos.concat({name});
-            setToDos(current);
-            setName("");
+            axios
+              .post(`/to-dos`, {
+                  name,
+              })
+              .then((response) => {
+                  const updatedToDos = [...toDos, response.data];
+                  setToDos(updatedToDos);
+              });
             handleClose();
         }
     };
 
-    return (
-        <div>
-            <List>
-                {toDos.map((item) =>
-                    (<ListItem> {(item.name)} </ListItem>)) }
-            </List>
+  return (
+    <div>
+      <List>
+        {toDos.map((item) => (
+          <ListItem key={item.id}>
+            <ListItemText primary={item.name} />
+          </ListItem>
+        ))}    </List>
             <Button onClick={handleClickOpen}>
                 + Add To Do
             </Button>
@@ -58,5 +71,5 @@ export default function ToDoView() {
                 <Button onClick={handleAddItem}>Add To Do</Button>
             </Dialog>
         </div>
-    )
+    );
 }
