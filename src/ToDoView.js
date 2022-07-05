@@ -1,5 +1,5 @@
 
-import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, TextField} from "@mui/material";
+import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, TextField} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ export default function ToDoView() {
         axios.get(`/to-dos`).then(response => {
             setToDos(response.data);
         })
-    });
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -34,12 +34,14 @@ export default function ToDoView() {
         handleClose()
     };
 
-
     return (
         <div>
             <List>
-                {toDos.map((item) =>
-                    (<ListItem> {(item.name)} </ListItem>)) }
+                {toDos.map((item) => (
+                    <ListItem key={item.id}>
+                        <ListItemText primary={item.name} />
+                    </ListItem>
+                ))}
             </List>
             <Button onClick={handleClickOpen}>
                 + Add To Do
