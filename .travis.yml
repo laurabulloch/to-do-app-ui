@@ -6,4 +6,4 @@ before_deploy:
 deploy:
   provider: heroku
   api_key: $HEROKU_API_KEY
-  app: things-i-need-to-do-ui
+  app: more-things-i-need-to-do
