@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "run": "react-scripts build"
+    "run": "react-scripts run"
   },
   "eslintConfig": {
     "extends": [
