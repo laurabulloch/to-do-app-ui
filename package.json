@@ -22,12 +22,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": [
@@ -54,5 +55,5 @@
   "engines": {
     "node": "16.x"
   },
-  "proxy": "https://more-things-i-need-to-do.herokuapp.com"
+  "proxy": "http://localhost:8080"
 }
