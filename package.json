@@ -52,5 +52,6 @@
   },
   "engines": {
     "node": "16.x"
-  }
+  },
+  "proxy": "https://things-i-need-to-do-ui.herokuapp.com"
 }
