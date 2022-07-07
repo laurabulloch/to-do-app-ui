@@ -9,7 +9,8 @@ export default function ToDoView() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    axios.get(`/to-dos`).then((response) => {
+    // eslint-disable-next-line no-undef
+    axios.get(process.env.REACT_APP_API_URL + '/to-dos').then((response) => {
       setToDos(response.data);
     });
   }, []);
@@ -33,7 +34,8 @@ export default function ToDoView() {
       handleInputError();
     } else {
       axios
-        .post(`/to-dos`, {
+        // eslint-disable-next-line no-undef
+        .post(process.env.REACT_APP_API_URL + '/to-dos', {
           name,
         })
         .then((response) => {
