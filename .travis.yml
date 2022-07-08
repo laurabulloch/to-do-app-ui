@@ -3,6 +3,8 @@ node_js:
   - "16"
 before_deploy:
   - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
+script:
+  - npm lint
 deploy:
   provider: heroku
   api_key: $HEROKU_API_KEY
