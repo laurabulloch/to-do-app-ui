@@ -52,6 +52,16 @@
     "eslint": "^8.18.0",
     "eslint-plugin-react": "^7.30.1"
   },
+  "jest": {
+    "coverageThreshold": {
+      "./src/ToDoView.js": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
   "engines": {
     "node": "16.x"
   },
