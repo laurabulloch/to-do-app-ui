@@ -83,5 +83,16 @@ describe('To Do View', () => {
 
       expect(screen.getByText('Item 3')).toBeInTheDocument();
     });
+    it('should be invalid input if input empty on save', () => {
+      userEvent.click(saveButton());
+
+      expect(screen.getByText('Invalid Input')).toBeInTheDocument();
+    });
+    it('should be invalid input if length >100', () => {
+      userEvent.type(toDoTextField(), 'a'.repeat(101));
+      userEvent.click(saveButton());
+
+      expect(screen.getByText('Invalid Input')).toBeInTheDocument();
+    });
   });
 });
