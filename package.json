@@ -53,6 +53,11 @@
     "eslint-plugin-react": "^7.30.1"
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js*",
+      "!src/index.js",
+      "!src/reportWebVitals.js"
+    ],
     "coverageThreshold": {
       "./src/ToDoView.js": {
         "branches": 100,
