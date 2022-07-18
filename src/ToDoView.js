@@ -21,6 +21,7 @@ export default function ToDoView() {
 
   const handleClose = () => {
     setErrorMessage('');
+    setName('');
     setOpen(false);
   };
 
