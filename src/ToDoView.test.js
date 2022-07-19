@@ -8,6 +8,7 @@ const addButton = () => screen.getByRole('button', '+ Add To Do');
 const saveButton = () => screen.getByText('Add To Do');
 const cancelButton = () => screen.getByText('Cancel');
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
+const mainToDoList = () => screen.getByRole('list', { id: 'main-todo-list' });
 
 jest.mock('axios');
 
@@ -34,6 +35,33 @@ describe('To Do View', () => {
   it('should display ToDos', () => {
     expect(screen.getByText('Item 1')).toBeInTheDocument();
     expect(screen.getByText('Item 2')).toBeInTheDocument();
+  });
+  it('should display ToDos', () => {
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+    expect(screen.getByText('Item 2')).toBeInTheDocument();
+  });
+  it('should display main to do list', () => {
+    expect(mainToDoList()).toBeInTheDocument();
+  });
+  it('should display delete button', () => {
+    expect(screen.getByLabelText('delete1')).toBeInTheDocument();
+    expect(screen.getByLabelText('delete2')).toBeInTheDocument();
+  });
+  it('should send delete request when delete button pressed', () => {
+    axios.delete.mockImplementation(() => new Promise(jest.fn()));
+
+    userEvent.click(screen.getByLabelText('delete1'));
+
+    expect(axios.delete).toHaveBeenCalledWith('/to-dos', { data: { id: 1 } });
+  });
+  it('should remove item when delete button pressed', async () => {
+    axios.delete.mockResolvedValue({ data: { id: 1 } });
+
+    await act(async () => {
+      userEvent.click(screen.getByLabelText('delete1'));
+    });
+
+    expect(screen.queryByText('Item 1')).not.toBeInTheDocument;
   });
   describe('add', () => {
     beforeEach(() => {
