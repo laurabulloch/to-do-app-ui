@@ -4,7 +4,7 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 
-const addButton = () => screen.getByRole('button', '+ Add To Do');
+const addButton = () => screen.getByText('+ Add To Do');
 const saveButton = () => screen.getByText('Add To Do');
 const cancelButton = () => screen.getByText('Cancel');
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');

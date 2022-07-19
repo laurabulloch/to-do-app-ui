@@ -76,7 +76,7 @@ export default function ToDoView() {
           </ListItem>
         ))}{' '}
       </List>
-      <Button onClick={handleClickOpen}>+ Add To Do</Button>
+      <Button onClick={handleClickOpen}> + Add To Do</Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
