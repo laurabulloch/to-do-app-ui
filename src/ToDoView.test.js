@@ -49,7 +49,7 @@ describe('To Do View', () => {
   it('should send delete request when delete button pressed', () => {
     axios.delete.mockImplementation(() => new Promise(jest.fn()));
 
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'Delete' }));
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
 
     expect(axios.delete).toHaveBeenCalledWith('/to-dos/1');
   });
@@ -57,7 +57,7 @@ describe('To Do View', () => {
     axios.delete.mockResolvedValue({});
 
     await act(async () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'Delete' }));
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
     });
 
     expect(screen.queryByText('Item 1')).not.toBeInTheDocument();

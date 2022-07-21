@@ -1,6 +1,17 @@
-import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, TextField } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function ToDoView() {
   const [open, setOpen] = useState(false);
@@ -66,7 +77,9 @@ export default function ToDoView() {
         {toDos.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
-            <Button onClick={() => handleClickDelete(item.id)}>Delete</Button>
+            <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
+              <DeleteIcon />
+            </IconButton>
           </ListItem>
         ))}{' '}
       </List>
