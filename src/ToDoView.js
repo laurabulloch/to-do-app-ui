@@ -10,9 +10,8 @@ import {
   TextField,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ToDoViewService } from './ToDoViewService';
+import ToDoViewService from './ToDoViewService';
 
 export default function ToDoView() {
   const [open, setOpen] = useState(false);
@@ -54,15 +53,12 @@ export default function ToDoView() {
   };
 
   const handleClickDelete = (idToDelete) => {
-    axios
-      // eslint-disable-next-line no-undef
-      .delete(process.env.REACT_APP_API_URL + '/to-dos/' + idToDelete)
-      .then(() => {
-        const updatedToDos = toDos.filter((remove) => {
-          return remove.id !== idToDelete;
-        });
-        setToDos(updatedToDos);
+    ToDoViewService.delete(idToDelete).then(() => {
+      const updatedToDos = toDos.filter((remove) => {
+        return remove.id !== idToDelete;
       });
+      setToDos(updatedToDos);
+    });
     handleClose();
   };
 
