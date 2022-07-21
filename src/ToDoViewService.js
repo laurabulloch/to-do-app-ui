@@ -1,14 +1,18 @@
 import axios from 'axios';
 
-export class ToDoViewService {
-  constructor() {
-    // eslint-disable-next-line no-undef
-    this.API_URL = process.env.REACT_APP_API_URL + '/to-dos';
-  }
-  async getAll() {
+const ToDoViewService = {
+  // eslint-disable-next-line no-undef
+  API_URL: process.env.REACT_APP_API_URL + '/to-dos',
+
+  getAll() {
     return axios.get(this.API_URL);
-  }
-  async post(data) {
+  },
+
+  post(data) {
     return axios.post(this.API_URL, { name: data });
-  }
-}
+  },
+  delete(id) {
+    return axios.delete(this.API_URL + '/' + id);
+  },
+};
+export default ToDoViewService;

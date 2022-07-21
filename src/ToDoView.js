@@ -19,11 +19,9 @@ export default function ToDoView() {
   const [name, setName] = useState('');
   const [toDos, setToDos] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  // eslint-disable-next-line no-unused-vars
-  const [toDoViewService, setToDoViewService] = useState(new ToDoViewService());
 
   useEffect(() => {
-    toDoViewService.getAll().then((response) => {
+    ToDoViewService.getAll().then((response) => {
       setToDos(response.data);
     });
   }, []);
@@ -47,7 +45,7 @@ export default function ToDoView() {
     if (name.length === 0 || name.length > 100) {
       handleInputError();
     } else {
-      toDoViewService.post(name).then((response) => {
+      ToDoViewService.post(name).then((response) => {
         const updatedToDos = [...toDos, response.data];
         setToDos(updatedToDos);
       });
