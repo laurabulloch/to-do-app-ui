@@ -1,7 +1,6 @@
 import { ToDoViewService } from './ToDoViewService';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
-import userEvent from '@testing-library/user-event';
 
 const toDoViewService = new ToDoViewService();
 
@@ -20,7 +19,7 @@ describe('To Do View Service', () => {
       { id: 1, name: 'Item 1' },
       { id: 2, name: 'Item 2' },
     ];
-    axios.get.mockResolvedValue({ data: toDos });
+    axios.get.mockResolvedValue(toDos);
 
     const response = await act(async () => {
       return toDoViewService.getAll();

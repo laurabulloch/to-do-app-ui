@@ -8,4 +8,7 @@ export class ToDoViewService {
   async getAll() {
     return axios.get(this.API_URL);
   }
+  async post(data) {
+    return axios.post(this.API_URL, { name: data });
+  }
 }
