@@ -1,12 +1,11 @@
 import ToDoView from './ToDoView';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
+import { act, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 import axios from 'axios';
-import { act } from 'react-dom/test-utils';
 
-const addButton = () => screen.getByText('+ Add To Do');
-const saveButton = () => screen.getByText('Add To Do');
-const cancelButton = () => screen.getByText('Cancel');
+const addButton = () => screen.getByRole('button', { name: '+ Add To Do' });
+const saveButton = () => screen.getByRole('button', { name: 'Add To Do' });
+const cancelButton = () => screen.getByRole('button', { name: 'Cancel' });
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
 const mainToDoList = () => screen.getByRole('list');
 
@@ -44,25 +43,24 @@ describe('To Do View', () => {
     expect(mainToDoList()).toBeInTheDocument();
   });
   it('should display delete button on each list item', () => {
-    const { getAllByRole } = within(mainToDoList());
-    const items = getAllByRole('button');
+    const items = within(mainToDoList()).getAllByRole('button');
     expect(items.length).toBe(2);
   });
   it('should send delete request when delete button pressed', () => {
     axios.delete.mockImplementation(() => new Promise(jest.fn()));
 
-    userEvent.click(screen.getByText('Item 1').closest(screen.getByText('Delete')));
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'Delete' }));
 
-    expect(axios.delete).toHaveBeenCalledWith('/to-dos', { data: { id: 1 } });
+    expect(axios.delete).toHaveBeenCalledWith('/to-dos/1');
   });
   it('should remove item when delete button pressed', async () => {
-    axios.delete.mockResolvedValue({ status: 204 });
+    axios.delete.mockResolvedValue({});
 
     await act(async () => {
-      userEvent.click(screen.getByText('Item 1').closest('button'));
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'Delete' }));
     });
 
-    expect(screen.queryByText('Item 1')).not.toBeInTheDocument;
+    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
   });
   describe('add', () => {
     beforeEach(() => {

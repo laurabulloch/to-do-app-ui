@@ -31,7 +31,7 @@ export default function ToDoView() {
   };
 
   const handleAddItem = () => {
-    if ({ name }.name.length === 0 || { name }.name.length > 100) {
+    if (name.length === 0 || name.length > 100) {
       handleInputError();
     } else {
       axios
@@ -47,34 +47,30 @@ export default function ToDoView() {
     }
   };
 
-  const handleClickDelete = (itemToDelete) => {
+  const handleClickDelete = (idToDelete) => {
     axios
       // eslint-disable-next-line no-undef
-      .delete(process.env.REACT_APP_API_URL + '/to-dos' + itemToDelete)
-      .then((response) => {
-        if (response.status === 204) {
-          const updatedToDos = toDos.filter((remove) => {
-            return remove.id !== response.data.id;
-          });
-          setToDos(updatedToDos);
-        }
+      .delete(process.env.REACT_APP_API_URL + '/to-dos/' + idToDelete)
+      .then(() => {
+        const updatedToDos = toDos.filter((remove) => {
+          return remove.id !== idToDelete;
+        });
+        setToDos(updatedToDos);
       });
     handleClose();
   };
 
   return (
     <div>
-      <List id={'main-todo-list'}>
+      <List>
         {toDos.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
-            <Button aria-label={'delete'} onClick={() => handleClickDelete(item.id)}>
-              Delete
-            </Button>
+            <Button onClick={() => handleClickDelete(item.id)}>Delete</Button>
           </ListItem>
         ))}{' '}
       </List>
-      <Button onClick={handleClickOpen}> + Add To Do</Button>
+      <Button onClick={handleClickOpen}>+ Add To Do</Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
