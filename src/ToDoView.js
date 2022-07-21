@@ -8,10 +8,11 @@ export default function ToDoView() {
   const [name, setName] = useState('');
   const [toDos, setToDos] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [toDoViewService, setToDoViewService] = useState(new ToDoViewService());
 
   useEffect(() => {
-    // eslint-disable-next-line no-undef
-    axios.get(process.env.REACT_APP_API_URL + '/to-dos').then((response) => {
+    toDoViewService.getAll().then((response) => {
       setToDos(response.data);
     });
   }, []);

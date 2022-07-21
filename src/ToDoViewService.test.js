@@ -1,6 +1,7 @@
 import { ToDoViewService } from './ToDoViewService';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 
 const toDoViewService = new ToDoViewService();
 
@@ -26,5 +27,12 @@ describe('To Do View Service', () => {
     });
 
     expect(response).toStrictEqual(toDos);
+  });
+  it('post should be called with data', () => {
+    axios.post.mockImplementation(() => new Promise(jest.fn()));
+
+    toDoViewService.post('Item 1');
+
+    expect(axios.post).toHaveBeenCalledWith('/to-dos', { name: 'Item 1' });
   });
 });
