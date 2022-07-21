@@ -1,6 +1,17 @@
-import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, TextField } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function ToDoView() {
   const [open, setOpen] = useState(false);
@@ -31,7 +42,7 @@ export default function ToDoView() {
   };
 
   const handleAddItem = () => {
-    if ({ name }.name.length === 0 || { name }.name.length > 100) {
+    if (name.length === 0 || name.length > 100) {
       handleInputError();
     } else {
       axios
@@ -47,12 +58,28 @@ export default function ToDoView() {
     }
   };
 
+  const handleClickDelete = (idToDelete) => {
+    axios
+      // eslint-disable-next-line no-undef
+      .delete(process.env.REACT_APP_API_URL + '/to-dos/' + idToDelete)
+      .then(() => {
+        const updatedToDos = toDos.filter((remove) => {
+          return remove.id !== idToDelete;
+        });
+        setToDos(updatedToDos);
+      });
+    handleClose();
+  };
+
   return (
     <div>
       <List>
         {toDos.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
+            <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
+              <DeleteIcon />
+            </IconButton>
           </ListItem>
         ))}{' '}
       </List>
