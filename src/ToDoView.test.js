@@ -1,6 +1,6 @@
 import ToDoView from './ToDoView';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 
@@ -8,7 +8,7 @@ const addButton = () => screen.getByText('+ Add To Do');
 const saveButton = () => screen.getByText('Add To Do');
 const cancelButton = () => screen.getByText('Cancel');
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
-const mainToDoList = () => screen.getByRole('list', { id: 'main-todo-list' });
+const mainToDoList = () => screen.getByRole('list');
 
 jest.mock('axios');
 
@@ -43,22 +43,23 @@ describe('To Do View', () => {
   it('should display main to do list', () => {
     expect(mainToDoList()).toBeInTheDocument();
   });
-  it('should display delete button', () => {
-    expect(screen.getByLabelText('delete1')).toBeInTheDocument();
-    expect(screen.getByLabelText('delete2')).toBeInTheDocument();
+  it('should display delete button on each list item', () => {
+    const { getAllByRole } = within(mainToDoList());
+    const items = getAllByRole('button');
+    expect(items.length).toBe(2);
   });
   it('should send delete request when delete button pressed', () => {
     axios.delete.mockImplementation(() => new Promise(jest.fn()));
 
-    userEvent.click(screen.getByLabelText('delete1'));
+    userEvent.click(screen.getByText('Item 1').closest(screen.getByText('Delete')));
 
     expect(axios.delete).toHaveBeenCalledWith('/to-dos', { data: { id: 1 } });
   });
   it('should remove item when delete button pressed', async () => {
-    axios.delete.mockResolvedValue({ data: { id: 1 } });
+    axios.delete.mockResolvedValue({ status: 204 });
 
     await act(async () => {
-      userEvent.click(screen.getByLabelText('delete1'));
+      userEvent.click(screen.getByText('Item 1').closest('button'));
     });
 
     expect(screen.queryByText('Item 1')).not.toBeInTheDocument;

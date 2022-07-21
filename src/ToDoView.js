@@ -47,19 +47,17 @@ export default function ToDoView() {
     }
   };
 
-  const handleClickDelete = (selectedId) => {
+  const handleClickDelete = (itemToDelete) => {
     axios
       // eslint-disable-next-line no-undef
-      .delete(process.env.REACT_APP_API_URL + '/to-dos', {
-        data: {
-          id: selectedId,
-        },
-      })
+      .delete(process.env.REACT_APP_API_URL + '/to-dos' + itemToDelete)
       .then((response) => {
-        const updatedToDos = toDos.filter((remove) => {
-          return remove.id !== response.data.id;
-        });
-        setToDos(updatedToDos);
+        if (response.status === 204) {
+          const updatedToDos = toDos.filter((remove) => {
+            return remove.id !== response.data.id;
+          });
+          setToDos(updatedToDos);
+        }
       });
     handleClose();
   };
@@ -68,9 +66,9 @@ export default function ToDoView() {
     <div>
       <List id={'main-todo-list'}>
         {toDos.map((item) => (
-          <ListItem key={item.id} id={item.id}>
+          <ListItem key={item.id}>
             <ListItemText primary={item.name} />
-            <Button aria-label={'delete' + item.id} onClick={() => handleClickDelete(item.id)}>
+            <Button aria-label={'delete'} onClick={() => handleClickDelete(item.id)}>
               Delete
             </Button>
           </ListItem>
