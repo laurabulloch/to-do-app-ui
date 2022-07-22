@@ -1,18 +1,14 @@
-import axios from 'axios';
+import RestClient from './RestClient';
 
 const ToDoViewService = {
-  // eslint-disable-next-line no-undef
-  API_URL: process.env.REACT_APP_API_URL + '/to-dos',
-
   getAll() {
-    return axios.get(this.API_URL);
+    return RestClient.get('/to-dos');
   },
-
   post(data) {
-    return axios.post(this.API_URL, { name: data });
+    return RestClient.post('/to-dos', { name: data });
   },
   delete(id) {
-    return axios.delete(this.API_URL + '/' + id);
+    return RestClient.delete('/to-dos/' + id);
   },
 };
 export default ToDoViewService;
