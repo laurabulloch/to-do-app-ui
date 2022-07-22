@@ -21,10 +21,9 @@ export default function ToDoView() {
 
   useEffect(() => {
     ToDoViewService.getAll().then((response) => {
-      setToDos(response.data);
+      setToDos(response.name);
     });
   }, []);
-
   const handleClickOpen = () => {
     setOpen(true);
   };

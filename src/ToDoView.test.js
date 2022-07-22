@@ -1,8 +1,8 @@
 import ToDoView from './ToDoView';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
-import axios from 'axios';
 import { act } from 'react-dom/test-utils';
+import ToDoViewService from './ToDoViewService';
 
 const addButton = () => screen.getByRole('button', { name: '+ Add To Do' });
 const saveButton = () => screen.getByRole('button', { name: 'Add To Do' });
@@ -10,7 +10,7 @@ const cancelButton = () => screen.getByRole('button', { name: 'Cancel' });
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
 const mainToDoList = () => screen.getByRole('list');
 
-jest.mock('axios');
+jest.mock('./ToDoViewService');
 
 describe('To Do View', () => {
   beforeEach(async () => {
@@ -18,7 +18,7 @@ describe('To Do View', () => {
       { id: 1, name: 'Item 1' },
       { id: 2, name: 'Item 2' },
     ];
-    axios.get.mockResolvedValue({ data: toDos });
+    ToDoViewService.getAll.mockResolvedValue({ data: toDos });
     await act(async () => {
       render(<ToDoView />);
     });
@@ -29,9 +29,6 @@ describe('To Do View', () => {
   it('should contain a list', () => {
     expect(screen.getByRole('list')).toBeInTheDocument();
   });
-  it('should load ToDos', () => {
-    expect(axios.get).toHaveBeenCalledWith('/to-dos');
-  });
   it('should display ToDos', () => {
     expect(screen.getByText('Item 1')).toBeInTheDocument();
     expect(screen.getByText('Item 2')).toBeInTheDocument();
@@ -41,15 +38,13 @@ describe('To Do View', () => {
     expect(items.length).toBe(2);
   });
   it('should send delete request when delete button pressed', () => {
-    axios.delete.mockImplementation(() => new Promise(jest.fn()));
+    ToDoViewService.delete.mockImplementation(() => new Promise(jest.fn()));
 
     userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
 
-    expect(axios.delete).toHaveBeenCalledWith('/to-dos/1');
+    expect(ToDoViewService.delete).toHaveBeenCalledWith('/to-dos/1');
   });
   it('should remove item when delete button pressed', async () => {
-    axios.delete.mockResolvedValue({});
-
     await act(async () => {
       userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
     });
@@ -81,15 +76,15 @@ describe('To Do View', () => {
       });
     });
     it('should post on save', () => {
-      axios.post.mockImplementation(() => new Promise(jest.fn()));
+      ToDoViewService.post.mockImplementation(() => new Promise(jest.fn()));
 
       userEvent.type(toDoTextField(), 'Item');
       userEvent.click(saveButton());
 
-      expect(axios.post).toHaveBeenCalledWith('/to-dos', { name: 'Item' });
+      expect(ToDoViewService.post).toHaveBeenCalledWith('/to-dos', { name: 'Item' });
     });
     it('should add to list on user input', async () => {
-      axios.post.mockResolvedValue({
+      ToDoViewService.post.mockResolvedValue({
         data: {
           id: 3,
           name: 'Item 3',
