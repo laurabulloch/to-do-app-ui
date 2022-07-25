@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import ToDoViewService from './ToDoViewService';
 
@@ -59,6 +60,7 @@ export default function ToDoView() {
       });
       setToDos(updatedToDos);
     });
+
     handleClose();
   };
 
