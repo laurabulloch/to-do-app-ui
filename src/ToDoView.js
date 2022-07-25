@@ -16,14 +16,15 @@ import ToDoViewService from './ToDoViewService';
 export default function ToDoView() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [toDos, setToDos] = useState([]);
+  const [toDos, setToDos] = useState();
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     ToDoViewService.getAll().then((response) => {
-      setToDos(response.name);
+      setToDos(response.data);
     });
   }, []);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -43,7 +44,7 @@ export default function ToDoView() {
     if (name.length === 0 || name.length > 100) {
       handleInputError();
     } else {
-      ToDoViewService.post(name).then((response) => {
+      ToDoViewService.post({ name }).then((response) => {
         const updatedToDos = [...toDos, response.data];
         setToDos(updatedToDos);
       });
@@ -52,7 +53,7 @@ export default function ToDoView() {
   };
 
   const handleClickDelete = (idToDelete) => {
-    ToDoViewService.delete(idToDelete).then(() => {
+    ToDoViewService.deleteItem(idToDelete).then(() => {
       const updatedToDos = toDos.filter((remove) => {
         return remove.id !== idToDelete;
       });
@@ -64,7 +65,7 @@ export default function ToDoView() {
   return (
     <div>
       <List>
-        {toDos.map((item) => (
+        {toDos?.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>

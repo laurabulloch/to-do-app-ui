@@ -1,14 +1,17 @@
 import RestClient from './RestClient';
 
-const ToDoViewService = {
-  getAll() {
-    return RestClient.get('/to-dos');
-  },
-  post(data) {
-    return RestClient.post('/to-dos', { name: data });
-  },
-  delete(id) {
-    return RestClient.delete('/to-dos/' + id);
-  },
+const getAll = () => {
+  return RestClient.get('/to-dos');
 };
-export default ToDoViewService;
+const post = (data) => {
+  return RestClient.post('/to-dos', { name: data });
+};
+const deleteItem = (id) => {
+  return RestClient.delete('/to-dos/' + id);
+};
+
+export default {
+  getAll,
+  deleteItem,
+  post,
+};

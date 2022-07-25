@@ -15,8 +15,8 @@ describe('To Do View Service', () => {
 
     expect(RestClient.post).toHaveBeenCalledWith('/to-dos', { name: 'Item 1' });
   });
-  it('delete should be called with data', () => {
-    ToDoViewService.delete(1);
+  it('delete should be called', () => {
+    ToDoViewService.deleteItem(1);
 
     expect(RestClient.delete).toHaveBeenCalledWith('/to-dos/1');
   });
@@ -31,6 +31,6 @@ describe('To Do View Service', () => {
       return ToDoViewService.getAll();
     });
 
-    expect(response).toBe(toDos);
+    expect(response).toStrictEqual({ data: toDos });
   });
 });

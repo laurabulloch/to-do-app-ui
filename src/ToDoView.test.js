@@ -38,13 +38,15 @@ describe('To Do View', () => {
     expect(items.length).toBe(2);
   });
   it('should send delete request when delete button pressed', () => {
-    ToDoViewService.delete.mockImplementation(() => new Promise(jest.fn()));
+    ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
 
     userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
 
-    expect(ToDoViewService.delete).toHaveBeenCalledWith('/to-dos/1');
+    expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
   });
   it('should remove item when delete button pressed', async () => {
+    ToDoViewService.deleteItem.mockResolvedValue({});
+
     await act(async () => {
       userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
     });
@@ -81,7 +83,7 @@ describe('To Do View', () => {
       userEvent.type(toDoTextField(), 'Item');
       userEvent.click(saveButton());
 
-      expect(ToDoViewService.post).toHaveBeenCalledWith('/to-dos', { name: 'Item' });
+      expect(ToDoViewService.post).toHaveBeenCalledWith({ name: 'Item' });
     });
     it('should add to list on user input', async () => {
       ToDoViewService.post.mockResolvedValue({
