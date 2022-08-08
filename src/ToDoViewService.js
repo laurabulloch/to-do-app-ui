@@ -9,9 +9,13 @@ const post = (data) => {
 const deleteItem = (id) => {
   return RestClient.delete('/to-dos/' + id);
 };
+const editItem = (data) => {
+  return RestClient.patch('/to-dos/', { name: data });
+};
 
 export default {
   getAll,
   deleteItem,
   post,
+  editItem,
 };

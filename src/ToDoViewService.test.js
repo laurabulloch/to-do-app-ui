@@ -33,4 +33,9 @@ describe('To Do View Service', () => {
 
     expect(response).toStrictEqual({ data: toDos });
   });
+  it('patch should be called', () => {
+    ToDoViewService.editItem('Item 1');
+
+    expect(RestClient.patch).toHaveBeenCalledWith('/to-dos/', { name: 'Item 1' });
+  });
 });
