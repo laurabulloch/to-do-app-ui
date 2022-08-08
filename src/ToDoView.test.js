@@ -72,6 +72,11 @@ describe('To Do View', () => {
 
     expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
   });
+  it('should have input box on edit dialog', () => {
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+
+    expect(screen.getByLabelText('Edit To Do Here')).toBeInTheDocument();
+  });
   describe('add', () => {
     beforeEach(() => {
       userEvent.click(addButton());

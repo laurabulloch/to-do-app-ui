@@ -1,6 +1,7 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
@@ -19,8 +20,10 @@ export default function ToDoView() {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [name, setName] = useState('');
+  const [editName, setEditName] = useState('');
   const [toDos, setToDos] = useState();
   const [errorMessage, setErrorMessage] = useState('');
+  const [editErrorMessage, setEditErrorMessage] = useState('');
 
   useEffect(() => {
     ToDoViewService.getAll().then((response) => {
@@ -32,7 +35,8 @@ export default function ToDoView() {
     setOpen(true);
   };
 
-  const handleClickOpenEdit = () => {
+  const handleClickOpenEdit = (itemToEdit) => {
+    setEditName(itemToEdit.name);
     setOpenEdit(true);
   };
 
@@ -40,6 +44,12 @@ export default function ToDoView() {
     setErrorMessage('');
     setName('');
     setOpen(false);
+  };
+
+  const handleEditClose = () => {
+    setEditErrorMessage('');
+    setEditName('');
+    setOpenEdit(false);
   };
 
   const handleInputError = () => {
@@ -76,13 +86,22 @@ export default function ToDoView() {
         {toDos?.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
-            <IconButton aria-label="edit" onClick={handleClickOpenEdit}>
+            <IconButton aria-label="edit" onClick={() => handleClickOpenEdit(item)}>
               <EditIcon />
             </IconButton>
-            <Dialog open={openEdit}>
-              <DialogTitle>Edit To Do</DialogTitle>
-              <Button>Cancel Edit</Button>
-              <Button>Save To Do</Button>
+            <Dialog open={openEdit} onClose={handleEditClose}>
+              <DialogContent>
+                <TextField
+                  label="Edit To Do Here"
+                  helperText={editErrorMessage}
+                  value={editName}
+                  onChange={(event) => setName(event.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button>Cancel Edit</Button>
+                <Button>Save To Do</Button>
+              </DialogActions>
             </Dialog>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
               <DeleteIcon />
@@ -101,8 +120,10 @@ export default function ToDoView() {
             onChange={(event) => setName(event.target.value)}
           />
         </DialogContent>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleAddItem}>Add To Do</Button>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddItem}>Add To Do</Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
