@@ -57,6 +57,9 @@ describe('To Do View', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'edit' });
     expect(items.length).toBe(2);
   });
+  it('should open dialog box when edit button pressed', () => {
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
   describe('add', () => {
     beforeEach(() => {
       userEvent.click(addButton());
