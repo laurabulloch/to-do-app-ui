@@ -34,13 +34,13 @@ describe('To Do View', () => {
     expect(screen.getByText('Item 2')).toBeInTheDocument();
   });
   it('should display delete button on each list item', () => {
-    const items = within(mainToDoList()).getAllByRole('button');
+    const items = within(mainToDoList()).getAllByRole('button', { name: 'delete' });
     expect(items.length).toBe(2);
   });
   it('should send delete request when delete button pressed', () => {
     ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
 
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
 
     expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
   });
@@ -48,10 +48,14 @@ describe('To Do View', () => {
     ToDoViewService.deleteItem.mockResolvedValue({});
 
     await act(async () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button'));
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
     });
 
     expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
+  });
+  it('should display edit button on each list item', () => {
+    const items = within(mainToDoList()).getAllByRole('button', { name: 'edit' });
+    expect(items.length).toBe(2);
   });
   describe('add', () => {
     beforeEach(() => {

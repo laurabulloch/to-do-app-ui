@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import ToDoViewService from './ToDoViewService';
 
 export default function ToDoView() {
@@ -70,6 +71,9 @@ export default function ToDoView() {
         {toDos?.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
+            <IconButton aria-label="edit" onClick={() => handleClickDelete(item.id)}>
+              <EditIcon />
+            </IconButton>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
               <DeleteIcon />
             </IconButton>
