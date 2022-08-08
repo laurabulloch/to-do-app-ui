@@ -62,6 +62,11 @@ describe('To Do View', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
+  it('should have save button on edit dialog', () => {
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+
+    expect(saveEditButton()).toBeInTheDocument();
+  });
   describe('add', () => {
     beforeEach(() => {
       userEvent.click(addButton());
