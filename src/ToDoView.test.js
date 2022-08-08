@@ -72,10 +72,23 @@ describe('To Do View', () => {
 
     expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
   });
-  it('should have input box on edit dialog', () => {
+  it('should allow edit cancel to close edit dialog', (done) => {
     userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
 
-    expect(screen.getByLabelText('Edit To Do Here')).toBeInTheDocument();
+    userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
+
+    waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+      expect(screen.queryByLabelText('Edit To Do Here')).not.toBeInTheDocument();
+      done();
+    });
+  });
+  it('should patch on edit dialog save', () => {
+    ToDoViewService.editItem.mockImplementation(() => new Promise(jest.fn()));
+
+    userEvent.type(screen.getByLabelText('Edit To Do Here'), 'Item');
+    userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
+
+    expect(ToDoViewService.editItem).toHaveBeenCalledWith('Item');
   });
   describe('add', () => {
     beforeEach(() => {
@@ -107,7 +120,7 @@ describe('To Do View', () => {
       userEvent.type(toDoTextField(), 'Item');
       userEvent.click(saveButton());
 
-      expect(ToDoViewService.post).toHaveBeenCalledWith({ name: 'Item' });
+      expect(ToDoViewService.post).toHaveBeenCalledWith('Item');
     });
     it('should add to list on user input', async () => {
       ToDoViewService.post.mockResolvedValue({

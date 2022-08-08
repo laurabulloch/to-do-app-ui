@@ -61,12 +61,25 @@ export default function ToDoView() {
     if (name.length === 0 || name.length > 100) {
       handleInputError();
     } else {
-      ToDoViewService.post({ name }).then((response) => {
+      ToDoViewService.post(name).then((response) => {
         const updatedToDos = [...toDos, response.data];
         setToDos(updatedToDos);
       });
       handleClose();
     }
+  };
+
+  const handleEditItem = () => {
+    ToDoViewService.editItem(editName).then((response) => {
+      const updatedToDos = toDos.map((toDo) => {
+        if (toDo.id === response.data.id) {
+          return response.data;
+        }
+        return toDo;
+      });
+      setToDos(updatedToDos);
+    });
+    handleEditClose();
   };
 
   const handleClickDelete = (idToDelete) => {
@@ -76,8 +89,6 @@ export default function ToDoView() {
       });
       setToDos(updatedToDos);
     });
-
-    handleClose();
   };
 
   return (
@@ -99,8 +110,8 @@ export default function ToDoView() {
                 />
               </DialogContent>
               <DialogActions>
-                <Button>Cancel Edit</Button>
-                <Button>Save To Do</Button>
+                <Button onClick={handleEditClose}>Cancel Edit </Button>
+                <Button onClick={handleEditItem}>Save To Do</Button>
               </DialogActions>
             </Dialog>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
