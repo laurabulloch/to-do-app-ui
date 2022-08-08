@@ -81,6 +81,8 @@ export default function ToDoView() {
             </IconButton>
             <Dialog open={openEdit}>
               <DialogTitle>Edit To Do</DialogTitle>
+              <Button>Cancel Edit</Button>
+              <Button>Save To Do</Button>
             </Dialog>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
               <DeleteIcon />
