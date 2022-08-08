@@ -17,6 +17,7 @@ import ToDoViewService from './ToDoViewService';
 
 export default function ToDoView() {
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [name, setName] = useState('');
   const [toDos, setToDos] = useState();
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,6 +30,10 @@ export default function ToDoView() {
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleClickOpenEdit = () => {
+    setOpenEdit(true);
   };
 
   const handleClose = () => {
@@ -71,9 +76,12 @@ export default function ToDoView() {
         {toDos?.map((item) => (
           <ListItem key={item.id}>
             <ListItemText primary={item.name} />
-            <IconButton aria-label="edit" onClick={() => handleClickDelete(item.id)}>
+            <IconButton aria-label="edit" onClick={handleClickOpenEdit}>
               <EditIcon />
             </IconButton>
+            <Dialog open={openEdit}>
+              <DialogTitle>Edit To Do</DialogTitle>
+            </Dialog>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
               <DeleteIcon />
             </IconButton>
