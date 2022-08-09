@@ -17,13 +17,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import ToDoViewService from './ToDoViewService';
 
 export default function ToDoView() {
-  const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [name, setName] = useState('');
   const [editName, setEditName] = useState('');
   const [toDos, setToDos] = useState();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [addErrorMessage, setAddErrorMessage] = useState('');
   const [editErrorMessage, setEditErrorMessage] = useState('');
+  const [currentToDo, setCurrentToDo] = useState({ id: 1, name: 'Item 1' });
 
   useEffect(() => {
     ToDoViewService.getAll().then((response) => {
@@ -32,18 +33,19 @@ export default function ToDoView() {
   }, []);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenAdd(true);
   };
 
   const handleClickOpenEdit = (itemToEdit) => {
+    setCurrentToDo(itemToEdit);
     setEditName(itemToEdit.name);
     setOpenEdit(true);
   };
 
-  const handleClose = () => {
-    setErrorMessage('');
+  const handleAddClose = () => {
+    setAddErrorMessage('');
     setName('');
-    setOpen(false);
+    setOpenAdd(false);
   };
 
   const handleEditClose = () => {
@@ -54,7 +56,7 @@ export default function ToDoView() {
 
   const handleInputError = () => {
     setName('');
-    setErrorMessage('Invalid Input');
+    setAddErrorMessage('Invalid Input');
   };
 
   const handleAddItem = () => {
@@ -65,11 +67,12 @@ export default function ToDoView() {
         const updatedToDos = [...toDos, response.data];
         setToDos(updatedToDos);
       });
-      handleClose();
+      handleAddClose();
     }
   };
 
   const handleEditItem = () => {
+    currentToDo.name = editName;
     ToDoViewService.editItem(editName).then((response) => {
       const updatedToDos = toDos.map((toDo) => {
         if (toDo.id === response.data.id) {
@@ -100,20 +103,6 @@ export default function ToDoView() {
             <IconButton aria-label="edit" onClick={() => handleClickOpenEdit(item)}>
               <EditIcon />
             </IconButton>
-            <Dialog open={openEdit} onClose={handleEditClose}>
-              <DialogContent>
-                <TextField
-                  label="Edit To Do Here"
-                  helperText={editErrorMessage}
-                  value={editName}
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleEditClose}>Cancel Edit </Button>
-                <Button onClick={handleEditItem}>Save To Do</Button>
-              </DialogActions>
-            </Dialog>
             <IconButton aria-label="delete" onClick={() => handleClickDelete(item.id)}>
               <DeleteIcon />
             </IconButton>
@@ -121,19 +110,36 @@ export default function ToDoView() {
         ))}{' '}
       </List>
       <Button onClick={handleClickOpen}>+ Add To Do</Button>
-      <Dialog open={open} onClose={handleClose}>
+
+      <Dialog open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
           <TextField
             label="Enter To Do here"
-            helperText={errorMessage}
+            helperText={addErrorMessage}
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddClose}>Cancel</Button>
           <Button onClick={handleAddItem}>Add To Do</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openEdit} onClose={handleEditClose}>
+        <DialogTitle>Edit</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Edit To Do here"
+            helperText={editErrorMessage}
+            value={editName}
+            onChange={(event) => setEditName(event.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose}>Cancel Edit </Button>
+          <Button onClick={handleEditItem}>Save To Do</Button>
         </DialogActions>
       </Dialog>
     </div>
