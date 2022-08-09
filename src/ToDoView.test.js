@@ -151,7 +151,7 @@ describe('To Do View', () => {
 
       userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
 
-      expect(ToDoViewService.editItem).toHaveBeenCalledWith('Item 1');
+      expect(ToDoViewService.editItem).toHaveBeenCalledWith({ id: 1, name: 'Item 1' });
     });
   });
 });

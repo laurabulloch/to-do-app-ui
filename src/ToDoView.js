@@ -73,13 +73,8 @@ export default function ToDoView() {
 
   const handleEditItem = () => {
     currentToDo.name = editName;
-    ToDoViewService.editItem(editName).then((response) => {
-      const updatedToDos = toDos.map((toDo) => {
-        if (toDo.id === response.data.id) {
-          return response.data;
-        }
-        return toDo;
-      });
+    ToDoViewService.editItem(currentToDo).then((response) => {
+      const updatedToDos = (toDos[toDos.findIndex((toDo) => toDo.id === currentToDo.id)] = response.data);
       setToDos(updatedToDos);
     });
     handleEditClose();
