@@ -39,22 +39,6 @@ describe('To Do View', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'delete' });
     expect(items.length).toBe(2);
   });
-  it('should send delete request when delete button pressed', () => {
-    ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
-
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-
-    expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
-  });
-  it('should remove item when delete button pressed', async () => {
-    ToDoViewService.deleteItem.mockResolvedValue({});
-
-    await act(async () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-    });
-
-    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
-  });
   it('should display edit button on each list item', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'edit' });
     expect(items.length).toBe(2);
@@ -152,6 +136,24 @@ describe('To Do View', () => {
       userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
 
       expect(ToDoViewService.editItem).toHaveBeenCalledWith({ id: 1, name: 'Item 1' });
+    });
+  });
+  describe('delete', () => {
+    it('should send delete request when delete button pressed', () => {
+      ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
+
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+
+      expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
+    });
+    it('should remove item when delete button pressed', async () => {
+      ToDoViewService.deleteItem.mockResolvedValue({});
+
+      await act(async () => {
+        userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+      });
+
+      expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
     });
   });
 });
