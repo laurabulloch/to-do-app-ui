@@ -15,7 +15,7 @@ describe('To Do View Service', () => {
 
     expect(RestClient.post).toHaveBeenCalledWith('/to-dos', { name: 'Item 1' });
   });
-  it('delete should be called', () => {
+  it('should call delete', () => {
     ToDoViewService.deleteItem(1);
 
     expect(RestClient.delete).toHaveBeenCalledWith('/to-dos/1');
@@ -33,7 +33,7 @@ describe('To Do View Service', () => {
 
     expect(response).toStrictEqual({ data: toDos });
   });
-  it('patch should be called', () => {
+  it('should call patch', () => {
     ToDoViewService.editItem('Item 1');
 
     expect(RestClient.patch).toHaveBeenCalledWith('/to-dos/', { name: 'Item 1' });

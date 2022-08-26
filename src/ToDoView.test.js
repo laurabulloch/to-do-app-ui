@@ -37,22 +37,6 @@ describe('To Do View', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'delete' });
     expect(items.length).toBe(2);
   });
-  it('should send delete request when delete button pressed', () => {
-    ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
-
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-
-    expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
-  });
-  it('should remove item when delete button pressed', async () => {
-    ToDoViewService.deleteItem.mockResolvedValue({});
-
-    await act(async () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-    });
-
-    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
-  });
   it('should display edit button on each list item', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'edit' });
     expect(items.length).toBe(2);
@@ -62,33 +46,54 @@ describe('To Do View', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
-  it('should have save button on edit dialog', () => {
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
 
-    expect(screen.getByRole('button', { name: 'Save To Do' })).toBeInTheDocument();
-  });
-  it('should have cancel button on edit dialog', () => {
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+  describe('delete', () => {
+    it('should send delete request when delete button pressed', () => {
+      ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
 
-    expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
-  });
-  it('should allow edit cancel to close edit dialog', (done) => {
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
 
-    userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
+      expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
+    });
+    it('should remove item when delete button pressed', async () => {
+      ToDoViewService.deleteItem.mockResolvedValue({});
 
-    waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
-      expect(screen.queryByLabelText('Edit To Do Here')).not.toBeInTheDocument();
-      done();
+      await act(async () => {
+        userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+      });
+
+      expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
     });
   });
-  it('should patch on edit dialog save', () => {
-    ToDoViewService.editItem.mockImplementation(() => new Promise(jest.fn()));
+  describe('edit dialog', () => {
+    it('should have save button', () => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
 
-    userEvent.type(screen.getByLabelText('Edit To Do Here'), 'Item');
-    userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
+      expect(screen.getByRole('button', { name: 'Save To Do' })).toBeInTheDocument();
+    });
+    it('should have cancel button', () => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
 
-    expect(ToDoViewService.editItem).toHaveBeenCalledWith('Item');
+      expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
+    });
+    it('should allow cancel to close', (done) => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+
+      userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
+
+      waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+        expect(screen.queryByLabelText('Edit To Do Here')).not.toBeInTheDocument();
+        done();
+      });
+    });
+    it('should patch on save', () => {
+      ToDoViewService.editItem.mockImplementation(() => new Promise(jest.fn()));
+
+      userEvent.type(screen.getByLabelText('Edit To Do Here'), 'Item');
+      userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
+
+      expect(ToDoViewService.editItem).toHaveBeenCalledWith('Item');
+    });
   });
   describe('add', () => {
     beforeEach(() => {
