@@ -9,6 +9,8 @@ const saveButton = () => screen.getByRole('button', { name: 'Add To Do' });
 const cancelButton = () => screen.getByRole('button', { name: 'Cancel' });
 const toDoTextField = () => screen.getByLabelText('Enter To Do here');
 const mainToDoList = () => screen.getByRole('list');
+const editButton = () => within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' });
+const editTextBox = () => screen.getByLabelText('Edit To Do here');
 
 jest.mock('./ToDoViewService');
 
@@ -37,63 +39,25 @@ describe('To Do View', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'delete' });
     expect(items.length).toBe(2);
   });
+  it('should send delete request when delete button pressed', () => {
+    ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
+
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+
+    expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
+  });
+  it('should remove item when delete button pressed', async () => {
+    ToDoViewService.deleteItem.mockResolvedValue({});
+
+    await act(async () => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+    });
+
+    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
+  });
   it('should display edit button on each list item', () => {
     const items = within(mainToDoList()).getAllByRole('button', { name: 'edit' });
     expect(items.length).toBe(2);
-  });
-  it('should open dialog box when edit button pressed', () => {
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-  });
-
-  describe('delete', () => {
-    it('should send delete request when delete button pressed', () => {
-      ToDoViewService.deleteItem.mockImplementation(() => new Promise(jest.fn()));
-
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-
-      expect(ToDoViewService.deleteItem).toHaveBeenCalledWith(1);
-    });
-    it('should remove item when delete button pressed', async () => {
-      ToDoViewService.deleteItem.mockResolvedValue({});
-
-      await act(async () => {
-        userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-      });
-
-      expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
-    });
-  });
-  describe('edit dialog', () => {
-    it('should have save button', () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-      expect(screen.getByRole('button', { name: 'Save To Do' })).toBeInTheDocument();
-    });
-    it('should have cancel button', () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-      expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
-    });
-    it('should allow cancel to close', (done) => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-      userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
-
-      waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
-        expect(screen.queryByLabelText('Edit To Do Here')).not.toBeInTheDocument();
-        done();
-      });
-    });
-    it('should patch on save', () => {
-      ToDoViewService.editItem.mockImplementation(() => new Promise(jest.fn()));
-
-      userEvent.type(screen.getByLabelText('Edit To Do Here'), 'Item');
-      userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
-
-      expect(ToDoViewService.editItem).toHaveBeenCalledWith('Item');
-    });
   });
   describe('add', () => {
     beforeEach(() => {
@@ -153,6 +117,41 @@ describe('To Do View', () => {
       userEvent.click(saveButton());
 
       expect(screen.getByText('Invalid Input')).toBeInTheDocument();
+    });
+  });
+  describe('edit', () => {
+    beforeEach(() => {
+      userEvent.click(editButton());
+    });
+    it('should open dialog box when edit button pressed', () => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+    it('should have save button on dialog', () => {
+      expect(screen.getByRole('button', { name: 'Save To Do' })).toBeInTheDocument();
+    });
+    it('should have cancel button on dialog', () => {
+      expect(screen.getByRole('button', { name: 'Cancel Edit' })).toBeInTheDocument();
+    });
+    it('should contain text box', () => {
+      expect(editTextBox()).toBeInTheDocument();
+    });
+    it('text box should contain To Do name', () => {
+      expect(editTextBox()).toHaveValue('Item 1');
+    });
+    it('should allow edit cancel to close edit dialog', (done) => {
+      userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
+
+      waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+        expect(screen.queryByLabelText('Edit To Do Here')).not.toBeInTheDocument();
+        done();
+      });
+    });
+    it('should patch on edit dialog save', () => {
+      ToDoViewService.editItem.mockImplementation(() => new Promise(jest.fn()));
+
+      userEvent.click(screen.getByRole('button', { name: 'Save To Do' }));
+
+      expect(ToDoViewService.editItem).toHaveBeenCalledWith({ id: 1, name: 'Item 1' });
     });
   });
 });
