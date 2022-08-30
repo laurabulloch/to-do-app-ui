@@ -73,9 +73,8 @@ export default function ToDoView() {
 
   const handleEditItem = () => {
     currentToDo.name = editName;
-    ToDoViewService.editItem(currentToDo).then((response) => {
-      const updatedToDos = (toDos[toDos.findIndex((toDo) => toDo.id === currentToDo.id)] = response.data);
-      setToDos(updatedToDos);
+    ToDoViewService.editItem(currentToDo).then(() => {
+      toDos[toDos.findIndex((toDo) => toDo.id === currentToDo.id)].name = currentToDo.name;
     });
     handleEditClose();
   };
@@ -110,7 +109,7 @@ export default function ToDoView() {
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
           <TextField
-            label="Enter To Do here"
+            label="Enter To Do Here"
             helperText={addErrorMessage}
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -126,7 +125,7 @@ export default function ToDoView() {
         <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
-            label="Edit To Do here"
+            label="Edit To Do Here"
             helperText={editErrorMessage}
             value={editName}
             onChange={(event) => setEditName(event.target.value)}

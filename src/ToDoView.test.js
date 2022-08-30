@@ -7,10 +7,10 @@ import ToDoViewService from './ToDoViewService';
 const addButton = () => screen.getByRole('button', { name: '+ Add To Do' });
 const saveButton = () => screen.getByRole('button', { name: 'Add To Do' });
 const cancelButton = () => screen.getByRole('button', { name: 'Cancel' });
-const toDoTextField = () => screen.getByLabelText('Enter To Do here');
+const toDoTextField = () => screen.getByLabelText('Enter To Do Here');
 const mainToDoList = () => screen.getByRole('list');
 const editButton = () => within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' });
-const editTextBox = () => screen.getByLabelText('Edit To Do here');
+const editTextBox = () => screen.getByLabelText('Edit To Do Here');
 
 jest.mock('./ToDoViewService');
 
@@ -121,6 +121,12 @@ describe('To Do View', () => {
     });
     it('text box should contain To Do name', () => {
       expect(editTextBox()).toHaveValue('Item 1');
+    });
+    it('should display value typed in text box', () => {
+      userEvent.clear(editTextBox());
+      userEvent.type(editTextBox(), 'Hello World!');
+
+      expect(screen.getByDisplayValue('Hello World!')).toBeInTheDocument();
     });
     it('should allow edit cancel to close edit dialog', (done) => {
       userEvent.click(screen.getByRole('button', { name: 'Cancel Edit' }));
