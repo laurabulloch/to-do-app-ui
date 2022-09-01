@@ -4,7 +4,7 @@ import { render, screen, waitForElementToBeRemoved, within } from '@testing-libr
 import { act } from 'react-dom/test-utils';
 import ToDoViewService from './ToDoViewService';
 
-const addButton = () => screen.getByRole('button', { name: '+ Add To Do' });
+const addButton = () => screen.getByRole('button', { name: '+ Add' });
 const saveButton = () => screen.getByRole('button', { name: 'Add To Do' });
 const cancelButton = () => screen.getByRole('button', { name: 'Cancel' });
 const toDoTextField = () => screen.getByLabelText('Enter To Do Here');

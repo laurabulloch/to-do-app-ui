@@ -90,6 +90,7 @@ export default function ToDoView() {
 
   return (
     <div>
+      <h1>To Do</h1>
       <List>
         {toDos?.map((item) => (
           <ListItem key={item.id}>
@@ -103,7 +104,7 @@ export default function ToDoView() {
           </ListItem>
         ))}{' '}
       </List>
-      <Button onClick={handleClickOpen}>+ Add To Do</Button>
+      <Button onClick={handleClickOpen}>+ Add</Button>
 
       <Dialog open={openAdd} onClose={handleAddClose}>
         <DialogTitle>Add New To Do</DialogTitle>
